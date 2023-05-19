@@ -1,0 +1,44 @@
+### 1.3 Предварительная обработка данных  
+
+_________________________________________________________________________________
+
+df_mer.dropna(inplace=True)
+df_mer.reset_index(drop=True, inplace=True)
+_________________________________________________________________________________
+
+#Вывод коробчатых диаграм в цикле только по числовым атриубтам
+for col in df_mer.select_dtypes(exclude=["object", "datetime64[ns]"]).columns:
+    #построение фигуры
+    plt.figure()
+    #Заголовк
+    plt.title(col)
+    #Вывод диаграммы
+    plt.boxplot(df_mer[col])
+    plt.show()
+
+_________________________________________________________________________________
+
+#Вывод коробчатых диаграм в цикле только по числовым атриубтам
+for col in df_mer.select_dtypes(exclude=["object", "datetime64[ns]"]).columns:
+    Q1 = df_mer[col].quantile(0.25)
+    Q3 = df_mer[col].quantile(0.75)
+    IQR = Q3 - Q1    #IQR is interquartile range. 
+
+    filter = (df_mer[col] >= Q1 - 1.5 * IQR) & (df_mer[col] <= Q3 + 1.5 *IQR)
+    df_mer = df_mer.loc[filter] 
+
+_________________________________________________________________________________ 
+
+#Вывод коробчатых диаграм в цикле только по числовым атриубтам
+for col in df_mer.select_dtypes(exclude=["object", "datetime64[ns]"]).columns:
+    #построение фигуры
+    plt.figure()
+    #Заголовк
+    plt.title(col)
+    #Вывод диаграммы
+    plt.boxplot(df_mer[col])
+    plt.show()
+
+_________________________________________________________________________________ 
+
+У атрибута 'INCOME_MAIN_AMT' можно увидеть небольшое отклонение от того что было, но это уже приемлимо

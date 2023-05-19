@@ -1,0 +1,59 @@
+
+
+
+import sklearn
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import MinMaxScaler
+
+# Алгоритмы кластеризации
+from sklearn.cluster import KMeans
+from sklearn.cluster import MiniBatchKMeans
+from sklearn.mixture import GaussianMixture
+
+
+%matplotlib inline
+
+_________________________________________________________________________________
+
+
+### 1.1 Парсинг данных
+
+_________________________________________________________________________________
+
+df = pd.read_csv('data/train_2.csv', delimiter=';', low_memory=False)
+df2 = pd.read_csv('data/train_1.csv', delimiter=';', low_memory=False)
+df_merge = df.merge(df2, how='outer')
+
+_________________________________________________________________________________
+
+df_mer = df_merge.truncate(after=250000)
+
+_________________________________________________________________________________
+
+df_mer
+
+_________________________________________________________________________________
+
+df_mer["INCOME_MAIN_AMT"] = df_mer["INCOME_MAIN_AMT"].astype(str).str.replace(",", ".").astype(float)
+#Приводим данный атрибут в числовой формат(в вещественные числа), в данном методе используем replace(заменяет запятую на точку) 
+#и astype(переводит в вещественный тип данных)
+
+_________________________________________________________________________________
+
+df_mer = df_mer[['AGE', 'GENDER', 'EDUCATION_LEVEL', 'MARITAL_STATUS', 'INCOME_MAIN_AMT', 'REG_CODE']]
+
+_________________________________________________________________________________
+
+plt.figure(figsize=(23, 15))
+sns.heatmap(df_mer.corr(), annot = True, vmin=-1, vmax=1,cmap= 'coolwarm')
+
+_________________________________________________________________________________
+
+На корреляционной карте выше видно, что довольно сильно коррелируют между собой атрибуты:<br>
+MATIRIAL_STATUS и EDUCATION_LEVEL<br>
+EDUCATION_LEVEL и DEPENDANT_CNT<br>
+MM_W_CARD и MM_IN_BANK<br>
+ID и MM_IN_BANK<br>
